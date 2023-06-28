@@ -12,6 +12,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
+import com.example.juda_kotlin.app.presentation.navigation.Screen
+import com.example.juda_kotlin.app.presentation.navigation.judaGraph
 import com.example.juda_kotlin.app.presentation.view.JudaMainScreen
 import com.example.juda_kotlin.ui.theme.Juda_KotlinTheme
 
@@ -26,7 +28,14 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colors.background
                 ) {
                     val navController = rememberNavController()
-                    JudaMainScreen(navController)
+                    NavHost(
+                        navController = navController,
+                        startDestination = Screen.SplashScreen.route
+                    ) {
+                        judaGraph(
+                            navController = navController
+                        )
+                    }
                 }
             }
         }

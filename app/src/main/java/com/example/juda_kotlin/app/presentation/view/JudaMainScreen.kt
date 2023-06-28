@@ -1,9 +1,6 @@
 package com.example.juda_kotlin.app.presentation.view
 
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
@@ -12,6 +9,7 @@ import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.Bottom
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -23,6 +21,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.juda_kotlin.R
 import com.example.juda_kotlin.app.presentation.component.TopJuda
+import com.example.juda_kotlin.app.presentation.navigation.Screen
 import com.example.juda_kotlin.ui.theme.TextStyles
 import com.example.juda_kotlin.ui.theme.card_gray
 import com.example.juda_kotlin.ui.theme.main_gray
@@ -40,7 +39,7 @@ fun JudaMainScreen(
         item { TopJuda() }
         item { SearchJuda() }
         item { MentorRecommend() }
-        item { MentorItemList() }
+        item { MentorItemList(onMove = {navController.navigate(Screen.DetailMentorScreen.route)}) }
         item { KeywordMentoring() }
         item { MentorItemList() }
     }
@@ -61,27 +60,31 @@ fun KeywordMentoring() {
             text = "자세히보기",
             fontSize = 8.sp,
             color = Color(0xFF7d7d7d),
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth().align(Bottom),
             textAlign = TextAlign.End
         )
     }
 }
 
 @Composable
-fun MentorItemList() {
+fun MentorItemList(
+    onMove: () -> Unit = {}
+) {
     LazyRow(
         horizontalArrangement = Arrangement.spacedBy(20.dp)
     ) {
         item {
             MentorItem(
+                onMove = onMove,
                 title = "전세 사기 피하는 팁",
                 description = "전직 공인중개사 윤현주의 사기 구별법",
                 detail_description = "집 구하면서 나도 전세 사기 당하진 않을까 걱정한 사람 들은 이것만 명심하자.",
-                tags = listOf("집 구하기", "가계부")
+                tags = listOf("집 구하기", "가계부", "집 구하기")
             )
         }
         item {
             MentorItem(
+                onMove = onMove,
                 title = "청소, 이 루틴만 세요.",
                 description = "가족들이 인정한 청소의 신을 만나다",
                 detail_description = "청소는 순서만 잘 따라 오면 어렵지 않아요. .. 많은 분들이 대부분 이",
@@ -93,6 +96,7 @@ fun MentorItemList() {
 
 @Composable
 fun MentorItem(
+    onMove: () -> Unit = {},
     title: String = "",
     description: String = "",
     detail_description: String = "",
@@ -103,6 +107,7 @@ fun MentorItem(
             .height(220.dp)
             .width(192.dp)
             .clip(RoundedCornerShape(23.dp))
+            .clickable(onClick = onMove)
             .background(card_gray)
             .padding(19.dp, 16.dp)
     ){
@@ -176,7 +181,7 @@ fun MentorRecommend() {
                 text = "자세히보기",
                 fontSize = 8.sp,
                 color = Color(0xFF7d7d7d),
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth().align(Bottom),
                 textAlign = TextAlign.End
             )
         }
