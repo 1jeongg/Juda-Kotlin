@@ -5,6 +5,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 // Set of Material typography styles to start with
@@ -33,8 +34,13 @@ object TextStyles{
         fontSize = 20.sp,
         color = Color.Black,
     )
-    val textSmallTitle = TextStyle(
+    val textSearch = TextStyle(
         fontWeight = FontWeight.Normal,
+        fontSize = 18.sp,
+        color = Color(0xFF8A8A8A),
+    )
+    val textSmallTitle = TextStyle(
+        fontWeight = FontWeight.Medium,
         fontSize = 16.sp,
         color = Color.Black,
     )
@@ -42,5 +48,15 @@ object TextStyles{
         fontWeight = FontWeight.Normal,
         fontSize = 14.sp,
         color = Color.Black,
+    )
+    val smallText12 = TextStyle(
+        fontWeight = FontWeight.Normal,
+        fontSize = 12.sp,
+        color = Color.Black,
+    )
+    val smallText10 = TextStyle(
+        fontWeight = FontWeight.Normal,
+        fontSize = 10.sp,
+        color = Color.Black
     )
 }
