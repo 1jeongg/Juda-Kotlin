@@ -3,6 +3,7 @@ package com.example.juda_kotlin.app.presentation.view
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
@@ -41,7 +42,7 @@ fun DetailMentorScreen(
             .fillMaxWidth()
             .padding(22.dp)
     ) {
-        item { DetailTopBar() }
+        item { DetailTopBar(onClick = {navController.navigateUp()}) }
         item { UserProfile() }
         item { DetailTitle() }
     }
@@ -142,7 +143,9 @@ fun UserProfile() {
 }
 
 @Composable
-fun DetailTopBar() {
+fun DetailTopBar(
+    onClick: () -> Unit = {}
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -151,7 +154,7 @@ fun DetailTopBar() {
         Image(
             painter = painterResource(id = R.drawable.back),
             contentDescription = "back arrow",
-            modifier = Modifier.width(11.dp)
+            modifier = Modifier.width(11.dp).clickable(onClick = onClick)
         )
         Text(
             text = "게시글",

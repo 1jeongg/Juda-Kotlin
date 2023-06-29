@@ -10,6 +10,7 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
@@ -17,6 +18,7 @@ import com.example.juda_kotlin.app.presentation.navigation.Screen
 import com.example.juda_kotlin.app.presentation.navigation.judaGraph
 import com.example.juda_kotlin.app.presentation.view.JudaMainScreen
 import com.example.juda_kotlin.ui.theme.Juda_KotlinTheme
+import com.google.firebase.ktx.Firebase
 import com.kakao.sdk.common.KakaoSdk
 import com.kakao.sdk.common.util.Utility
 import dagger.hilt.android.AndroidEntryPoint
@@ -32,6 +34,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
+                    Log.d("tagtag", Utility.getKeyHash(context = LocalContext.current))
                     val navController = rememberNavController()
                     NavHost(
                         navController = navController,

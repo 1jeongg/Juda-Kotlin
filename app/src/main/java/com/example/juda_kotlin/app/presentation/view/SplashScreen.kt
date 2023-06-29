@@ -12,25 +12,31 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
 import com.example.juda_kotlin.R
 import com.example.juda_kotlin.app.presentation.navigation.Screen
+import com.example.juda_kotlin.app.presentation.viewmodel.loginViewModel
 import com.example.juda_kotlin.ui.theme.main_gray
+import com.example.juda_kotlin.ui.theme.main_yellow
 import kotlinx.coroutines.delay
 
 @Composable
 fun SplashScreen(
-    navController: NavController
+    navController: NavController,
+    loginViewModel: loginViewModel = hiltViewModel()
 ){
     LaunchedEffect(key1 = true){
-        val nextScreen = Screen.SignInScreen
-        delay(500L)
+        val nextScreen = Screen.BigCategoryScreen // if (loginViewModel.isLogIn()) Screen.JudaMainScreen else Screen.SignInScreen
+        delay(1000L)
+        navController.popBackStack()
         navController.navigate(nextScreen.route)
     }
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(main_gray)
+            .background(main_yellow)
     ){
         Image(
             painter = painterResource(id = R.drawable.big_juda),
