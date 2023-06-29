@@ -1,43 +1,45 @@
 package com.example.juda_kotlin.app.presentation.view
 
-import android.view.RoundedCorner
+import android.util.Log
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
-import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.Bottom
 import androidx.compose.ui.Alignment.Companion.BottomCenter
-import androidx.compose.ui.Alignment.Companion.Center
-import androidx.compose.ui.Alignment.Companion.CenterEnd
-import androidx.compose.ui.Alignment.Companion.CenterStart
-import androidx.compose.ui.Alignment.Companion.Start
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.juda_kotlin.R
+import com.example.juda_kotlin.app.data.PostDTO
+import com.example.juda_kotlin.app.domain.kakao_login.GlobalApplication
+import com.example.juda_kotlin.app.presentation.component.NavigationBar
 import com.example.juda_kotlin.app.presentation.component.TopJuda
 import com.example.juda_kotlin.app.presentation.navigation.Screen
+import com.example.juda_kotlin.app.presentation.viewmodel.MentorViewModel
 import com.example.juda_kotlin.ui.theme.TextStyles
 import com.example.juda_kotlin.ui.theme.card_gray
 import com.example.juda_kotlin.ui.theme.main_gray
 
 @Composable
 fun JudaMainScreen(
-    navController: NavController
+    navController: NavController,
+    mentorViewModel: MentorViewModel = hiltViewModel()
 ){
+    val tags = GlobalApplication.prefs.getString("tag2", "")
+    val posts = mentorViewModel.posts
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -45,50 +47,17 @@ fun JudaMainScreen(
     ) {
         Box {
             LazyColumn(
-                modifier = Modifier.padding(top = 27.dp, start = 20.dp, end = 20.dp)
+                modifier = Modifier.padding(top = 27.dp, start = 20.dp, end = 20.dp, bottom = 100.dp)
             ) {
                 item { TopJuda() }
                 item { SearchJuda() }
                 item { MentorRecommend() }
-                item { MentorItemList(onMove = { navController.navigate(Screen.DetailMentorScreen.route) }) }
+                item { MentorItemList(posts, navController) }
                 item { KeywordMentoring() }
-                item { MentorItemList() }
+                item { MentorItemList(posts, navController) }
             }
         }
-        Column(
-            modifier = Modifier.align(BottomCenter).padding(17.dp)
-        ) {
-            Image(
-                painter = painterResource(id = R.drawable.post),
-                contentDescription = "post",
-                modifier = Modifier.size(65.dp).clickable { }.padding(bottom=17.dp)
-                    .align(Alignment.End)
-            )
-            Box(
-                modifier = Modifier
-                    .height(65.dp)
-                    .background(Color.White, RoundedCornerShape(46.dp))
-                    .fillMaxWidth()
-                    .border(BorderStroke(0.5.dp, main_gray), RoundedCornerShape(46.dp))
-            ) {
-
-                Text(text = "A",
-                    style = TextStyles.smallText12,
-                    modifier = Modifier
-                        .align(CenterStart)
-                        .padding(start = 50.dp)
-                        .clickable { navController.navigate(Screen.MenteeScreen.route) })
-                Text(text = "B", style = TextStyles.smallText12, modifier = Modifier
-                    .align(Center)
-                    .clickable { navController.navigate(Screen.PostScreen.route) })
-                Text(text = "C",
-                    style = TextStyles.smallText12,
-                    modifier = Modifier
-                        .align(CenterEnd)
-                        .padding(end = 50.dp)
-                        .clickable { })
-            }
-        }
+        NavigationBar(Modifier.align(BottomCenter), navController = navController)
     }
 }
 
@@ -117,28 +86,22 @@ fun KeywordMentoring() {
 
 @Composable
 fun MentorItemList(
-    onMove: () -> Unit = {}
+    posts: List<PostDTO> = emptyList<PostDTO>(),
+    navController: NavController
 ) {
     LazyRow(
         horizontalArrangement = Arrangement.spacedBy(20.dp)
     ) {
-        item {
-            MentorItem(
-                onMove = onMove,
-                title = "전세 사기 피하는 팁",
-                description = "전직 공인중개사 윤현주의 사기 구별법",
-                detail_description = "집 구하면서 나도 전세 사기 당하진 않을까 걱정한 사람 들은 이것만 명심하자.",
-                tags = listOf("집 구하기", "가계부", "집 구하기")
-            )
-        }
-        item {
-            MentorItem(
-                onMove = onMove,
-                title = "청소, 이 루틴만 세요.",
-                description = "가족들이 인정한 청소의 신을 만나다",
-                detail_description = "청소는 순서만 잘 따라 오면 어렵지 않아요. .. 많은 분들이 대부분 이",
-                tags = listOf("반짝반짝한 집")
-            )
+        posts.forEach {
+            item {
+                MentorItem(
+                    onMove = { navController.navigate(Screen.DetailMentorScreen.route + "/${it.id}") },
+                    title = it.title,
+                    description = it.content,
+                    detail_description = it.content,
+                    tags = it.tag2
+                )
+            }
         }
     }
 }

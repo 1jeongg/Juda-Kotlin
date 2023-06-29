@@ -28,7 +28,7 @@ fun SplashScreen(
     loginViewModel: loginViewModel = hiltViewModel()
 ){
     LaunchedEffect(key1 = true){
-        val nextScreen = Screen.BigCategoryScreen // if (loginViewModel.isLogIn()) Screen.JudaMainScreen else Screen.SignInScreen
+        val nextScreen = if (loginViewModel.isLogIn()) Screen.JudaMainScreen else Screen.SignInScreen
         delay(1000L)
         navController.popBackStack()
         navController.navigate(nextScreen.route)

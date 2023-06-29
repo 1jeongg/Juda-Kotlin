@@ -18,15 +18,21 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.example.juda_kotlin.app.data.PostDTO
+import com.example.juda_kotlin.app.data.allCategory
+import com.example.juda_kotlin.app.presentation.component.NavigationBar
 import com.example.juda_kotlin.app.presentation.component.TopJuda
 import com.example.juda_kotlin.app.presentation.navigation.Screen
+import com.example.juda_kotlin.app.presentation.viewmodel.MenteeViewModel
 import com.example.juda_kotlin.ui.theme.TextStyles
 import com.example.juda_kotlin.ui.theme.main_gray
 
 @Composable
 fun MenteeScreen(
-    navController: NavController
+    navController: NavController,
+    menteeViewModel: MenteeViewModel = hiltViewModel()
 ){
     Box(
         modifier = Modifier
@@ -38,52 +44,42 @@ fun MenteeScreen(
                 modifier = Modifier.padding(top = 27.dp, start = 20.dp, end = 20.dp)
             ) {
                 TopJuda()
-                FilterItemList(listOf("반짝반짝한 집", "집 구하기", "가계부", "기타 등등"))
-                MenteeItemList()
+                FilterItemList(allCategory)
+                MenteeItemList(menteeViewModel.posts, navController)
             }
         }
-        Box(
-            modifier = Modifier
-                .padding(17.dp)
-                .background(Color.White, RoundedCornerShape(46.dp))
-                .height(65.dp)
-                .align(Alignment.BottomCenter)
-                .fillMaxWidth()
-                .border(BorderStroke(0.5.dp, main_gray), RoundedCornerShape(46.dp))){
-            Text(text = "A", style = TextStyles.smallText12, modifier = Modifier
-                .align(Alignment.CenterStart)
-                .padding(start = 50.dp)
-                .clickable { })
-            Text(text = "B", style = TextStyles.smallText12, modifier = Modifier
-                .align(Alignment.Center)
-                .clickable { })
-            Text(text = "C", style = TextStyles.smallText12, modifier = Modifier
-                .align(Alignment.CenterEnd)
-                .padding(end = 50.dp)
-                .clickable { })
-        }
+        NavigationBar(Modifier.align(Alignment.BottomCenter), navController = navController)
     }
 }
 
 @Composable
-fun MenteeItemList() {
+fun MenteeItemList(
+    posts: List<PostDTO> = emptyList(),
+    navController: NavController
+) {
     LazyColumn {
-        item { MenteeItem() }
-        item { MenteeItem() }
-        item { MenteeItem() }
-        item { MenteeItem() }
+        posts.forEach {
+            item { MenteeItem(
+                onClick = {navController.navigate(Screen.MenteeScreen.route + "/${it.id}")},
+                title = it.title,
+                description = it.content,
+                name = it.content,
+                date = it.date
+            ) }
+        }
         item { Spacer(modifier = Modifier.height(60.dp)) }
     }
 }
 @Composable
 fun MenteeItem(
+    onClick: () -> Unit = {},
     title: String = "영어 잘 하시는 멘토분을 찾습니다.",
     description: String = "외국계 면접 볼 기회가 생겨 급하게 멘토분을 찾습니다",
     name: String = "김주다 · 주니어 멘티",
     date: String = "2023. 06. 29. THU"
 ){
     Column(
-        modifier = Modifier.padding(bottom = 24.dp),
+        modifier = Modifier.padding(bottom = 24.dp).clickable(onClick = onClick),
         verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
         Divider( Modifier.padding(bottom = 24.dp))

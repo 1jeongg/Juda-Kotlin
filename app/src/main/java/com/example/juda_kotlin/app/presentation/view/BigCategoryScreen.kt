@@ -8,6 +8,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -28,9 +30,8 @@ import com.example.juda_kotlin.ui.theme.main_yellow
 @Composable
 fun BigCategoryScreen(
     navController: NavController,
-    loginViewModel: loginViewModel = hiltViewModel()
 ) {
-    var index = 0
+    val isSelected = remember {mutableStateOf(0)}
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -57,7 +58,7 @@ fun BigCategoryScreen(
                     .padding(45.dp)
                     .height(40.dp)
                     .clip(RoundedCornerShape(24.dp))
-                    .clickable(onClick = { navController.navigate(Screen.SmallCategoryScreen.route + "/$index") })
+                    .clickable(onClick = { navController.navigate(Screen.SmallCategoryScreen.route + "/${isSelected.value}") })
                     .background(main_yellow)
             ){
                 Text(
@@ -85,7 +86,10 @@ fun BigCategoryScreen(
                     .padding(top = 9.dp, bottom = 25.dp), thickness = 0.5.dp)
                 repeat(3){
                     SelectTopic(
-                        onClick = { index = it },
+                        isSelected = isSelected.value == it,
+                        onClick = {
+                            isSelected.value = it
+                        },
                         id = categoryImage[it],
                         text = BigCategory[it]
                     )
@@ -98,10 +102,12 @@ fun BigCategoryScreen(
 
 @Composable
 fun SelectTopic(
+    isSelected: Boolean = false,
     onClick: () -> Unit = {},
     id: Int = R.drawable.future,
     text: String = "취업/진로"
 ){
+    val img = if (isSelected) R.drawable.checked else R.drawable.unchecked
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -110,7 +116,9 @@ fun SelectTopic(
             .padding(bottom = 14.dp)
     ) {
         Image(
-            modifier = Modifier.fillMaxSize().clickable(onClick = onClick),
+            modifier = Modifier
+                .fillMaxSize()
+                .clickable(onClick = onClick),
             painter = painterResource(id = id),
             contentDescription = ""
         )
@@ -121,6 +129,11 @@ fun SelectTopic(
             modifier = Modifier
                 .align(Alignment.BottomStart)
                 .padding(start = 25.dp, bottom = 10.dp)
+        )
+        Image(
+            painter = painterResource(id = img),
+            contentDescription = "check",
+            modifier = Modifier.padding(bottom = 11.dp, end = 22.dp).size(33.dp).align(Alignment.BottomEnd)
         )
     }
 }

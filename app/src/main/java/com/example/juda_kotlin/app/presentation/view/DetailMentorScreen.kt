@@ -1,5 +1,6 @@
 package com.example.juda_kotlin.app.presentation.view
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -15,18 +16,28 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.example.juda_kotlin.R
+import com.example.juda_kotlin.app.data.PostDTO
+import com.example.juda_kotlin.app.presentation.viewmodel.MentorViewModel
 import com.example.juda_kotlin.ui.theme.TextStyles
 import com.example.juda_kotlin.ui.theme.main_gray
+import com.example.juda_kotlin.ui.theme.main_yellow
 
 @Composable
 fun DetailMentorScreen(
-    navController: NavController
+    navController: NavController,
+    mentorViewModel: MentorViewModel = hiltViewModel(),
+    index: String = ""
 ){
     Box(
         modifier = Modifier
@@ -62,7 +73,7 @@ fun DetailButton(
                 .height(65.dp)
                 .border(width = 0.5.dp, color = main_gray, shape = RoundedCornerShape(46.dp))
                 .clip(RoundedCornerShape(46.dp))
-                .background(Color(0xFFEAEAEA)),
+                .background(main_yellow),
             contentAlignment = Alignment.Center
         ){
             Text(
@@ -118,19 +129,27 @@ fun DetailTitle(
 }
 
 @Composable
-fun UserProfile() {
+fun UserProfile(
+    post: PostDTO = PostDTO()
+) {
     Row(modifier = Modifier.padding(bottom = 30.dp)){
-        Image(
-            painter = painterResource(R.drawable.ic_launcher_background),
-            contentDescription = "profile image",
+        AsyncImage(
+            model = ImageRequest.Builder(LocalContext.current)
+                .data("https://k.kakaocdn.net/dn/KeUb5/btr6EUTjP33/mkPVnUVKkmO4tpI5JbBqr0/img_640x640.jpghttps://k.kakaocdn.net/dn/KeUb5/btr6EUTjP33/mkPVnUVKkmO4tpI5JbBqr0/img_640x640.jpg")
+                .crossfade(true)
+                .build(),
+            contentDescription = null,
+            placeholder = painterResource(R.drawable.small_juda),
+            contentScale = ContentScale.Crop,
             modifier = Modifier
                 .size(38.dp)
                 .padding(end = 13.dp)
-                .clip(CircleShape)
+                .clip(CircleShape),
+            alignment = Alignment.Center
         )
         Column {
             Text(
-                text = "윤현주",
+                text = post.author,
                 style = TextStyles.textSmallTitle,
             )
             Text(

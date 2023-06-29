@@ -22,7 +22,7 @@ import com.example.juda_kotlin.R
 import com.example.juda_kotlin.app.data.BigCategory
 import com.example.juda_kotlin.app.data.SmallCategory
 import com.example.juda_kotlin.app.presentation.navigation.Screen
-import com.example.juda_kotlin.app.presentation.viewmodel.loginViewModel
+import com.example.juda_kotlin.app.presentation.viewmodel.CategoryViewModel
 import com.example.juda_kotlin.ui.theme.TextStyles
 import com.example.juda_kotlin.ui.theme.main_gray
 import com.example.juda_kotlin.ui.theme.main_yellow
@@ -31,7 +31,7 @@ import com.example.juda_kotlin.ui.theme.main_yellow
 fun SmallCategoryScreen(
     navController: NavController,
     index: Int,
-    loginViewModel: loginViewModel = hiltViewModel()
+    categoryViewModel: CategoryViewModel = hiltViewModel()
 ) {
     val isSelected  = remember { listOf(mutableStateOf(false), mutableStateOf(false), mutableStateOf(false),
         mutableStateOf(false), mutableStateOf(false), mutableStateOf(false)) }
@@ -61,7 +61,10 @@ fun SmallCategoryScreen(
                     .padding(45.dp)
                     .height(40.dp)
                     .clip(RoundedCornerShape(24.dp))
-                    .clickable(onClick = { navController.navigate(Screen.JudaMainScreen.route) })
+                    .clickable {
+                        categoryViewModel.makeUserByFireBase()
+                        navController.navigate(Screen.JudaMainScreen.route)
+                    }
                     .background(main_yellow)
             ){
                 Text(
@@ -69,8 +72,7 @@ fun SmallCategoryScreen(
                     style = TextStyles.textSearch,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .align(Alignment.Center)
-                        .clickable { navController.navigate(Screen.JudaMainScreen.route) },
+                        .align(Alignment.Center),
                     textAlign = TextAlign.Center,
                     color = Color.Black
                 )
@@ -100,10 +102,11 @@ fun SmallCategoryScreen(
                         isSelected = isSelected[a].value,
                         text = it,
                         onClick = {
-                            loginViewModel.addSmallCategory(a)
+                            categoryViewModel.addSmallCategory(index, a)
                             isSelected[a].value = !isSelected[a].value
                         })
                 }
+                Spacer(modifier = Modifier.height(80.dp))
             }
         }
 
