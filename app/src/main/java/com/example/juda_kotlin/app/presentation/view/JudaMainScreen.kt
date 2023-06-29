@@ -8,7 +8,9 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
 import androidx.compose.material.Text
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.Bottom
 import androidx.compose.ui.Alignment.Companion.BottomCenter
@@ -25,6 +27,7 @@ import androidx.navigation.NavController
 import com.example.juda_kotlin.R
 import com.example.juda_kotlin.app.data.PostDTO
 import com.example.juda_kotlin.app.domain.kakao_login.GlobalApplication
+import com.example.juda_kotlin.app.presentation.component.DialogBoxLoading
 import com.example.juda_kotlin.app.presentation.component.NavigationBar
 import com.example.juda_kotlin.app.presentation.component.TopJuda
 import com.example.juda_kotlin.app.presentation.navigation.Screen
@@ -32,6 +35,7 @@ import com.example.juda_kotlin.app.presentation.viewmodel.MentorViewModel
 import com.example.juda_kotlin.ui.theme.TextStyles
 import com.example.juda_kotlin.ui.theme.card_gray
 import com.example.juda_kotlin.ui.theme.main_gray
+import kotlinx.coroutines.delay
 
 @Composable
 fun JudaMainScreen(
@@ -40,6 +44,12 @@ fun JudaMainScreen(
 ){
     val tags = GlobalApplication.prefs.getString("tag2", "")
     val posts = mentorViewModel.posts
+    val scaffoldState = rememberScaffoldState()
+    mentorViewModel.getPosts() //legacy
+    LaunchedEffect(key1 = true){
+        mentorViewModel.getPosts()
+        delay(3000L)
+    }
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -47,7 +57,12 @@ fun JudaMainScreen(
     ) {
         Box {
             LazyColumn(
-                modifier = Modifier.padding(top = 27.dp, start = 20.dp, end = 20.dp, bottom = 100.dp)
+                modifier = Modifier.padding(
+                    top = 27.dp,
+                    start = 20.dp,
+                    end = 20.dp,
+                    bottom = 50.dp
+                )
             ) {
                 item { TopJuda() }
                 item { SearchJuda() }
@@ -55,11 +70,13 @@ fun JudaMainScreen(
                 item { MentorItemList(posts, navController) }
                 item { KeywordMentoring() }
                 item { MentorItemList(posts, navController) }
+                item { Spacer(modifier = Modifier.height(50.dp)) }
             }
         }
-        NavigationBar(Modifier.align(BottomCenter), navController = navController)
+        NavigationBar(Modifier.align(BottomCenter), navController = navController, true)
     }
 }
+
 
 @Composable
 fun KeywordMentoring() {
@@ -67,7 +84,7 @@ fun KeywordMentoring() {
         modifier = Modifier.padding(top = 46.dp, bottom = 18.dp)
     ) {
         Text(
-            text = "이런 멘토 어때요?",
+            text = "모든 키워드 멘토링",
             style = TextStyles.textSearch,
             color = Color.Black,
             fontWeight = FontWeight.Medium,
@@ -95,7 +112,7 @@ fun MentorItemList(
         posts.forEach {
             item {
                 MentorItem(
-                    onMove = { navController.navigate(Screen.DetailMentorScreen.route + "/${it.id}") },
+                    onMove = { navController.navigate(Screen.DetailMentorScreen.route) },
                     title = it.title,
                     description = it.content,
                     detail_description = it.content,

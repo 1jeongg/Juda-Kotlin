@@ -9,6 +9,10 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.kakao.sdk.common.KakaoSdk.init
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 import java.sql.Timestamp
 import javax.inject.Inject
@@ -22,7 +26,7 @@ class MentorViewModel @Inject constructor(): ViewModel() {
     init {
         getPosts()
     }
-    private fun getPosts(){
+    fun getPosts() = viewModelScope.launch {
         val db = Firebase.firestore
         db.collection("postProvider")
             .get()

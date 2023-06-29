@@ -10,7 +10,9 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
 import androidx.compose.material.Text
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -34,6 +36,9 @@ fun MenteeScreen(
     navController: NavController,
     menteeViewModel: MenteeViewModel = hiltViewModel()
 ){
+    val scaffoldState = rememberScaffoldState()
+    val posts = menteeViewModel.posts
+    menteeViewModel.getPosts() //legacy
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -45,10 +50,10 @@ fun MenteeScreen(
             ) {
                 TopJuda()
                 FilterItemList(allCategory)
-                MenteeItemList(menteeViewModel.posts, navController)
+                MenteeItemList(posts = posts, navController = navController)
             }
         }
-        NavigationBar(Modifier.align(Alignment.BottomCenter), navController = navController)
+        NavigationBar(Modifier.align(Alignment.BottomCenter), navController = navController, false)
     }
 }
 
@@ -60,7 +65,7 @@ fun MenteeItemList(
     LazyColumn {
         posts.forEach {
             item { MenteeItem(
-                onClick = {navController.navigate(Screen.MenteeScreen.route + "/${it.id}")},
+                onClick = {navController.navigate(Screen.DetailMentorScreen.route)},
                 title = it.title,
                 description = it.content,
                 name = it.content,

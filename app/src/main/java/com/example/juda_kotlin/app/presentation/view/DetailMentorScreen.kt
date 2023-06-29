@@ -1,6 +1,5 @@
 package com.example.juda_kotlin.app.presentation.view
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -9,26 +8,23 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.BottomCenter
+import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import androidx.navigation.NavController
-import coil.compose.AsyncImage
-import coil.request.ImageRequest
 import com.example.juda_kotlin.R
 import com.example.juda_kotlin.app.data.PostDTO
-import com.example.juda_kotlin.app.presentation.viewmodel.MentorViewModel
 import com.example.juda_kotlin.ui.theme.TextStyles
 import com.example.juda_kotlin.ui.theme.main_gray
 import com.example.juda_kotlin.ui.theme.main_yellow
@@ -36,31 +32,130 @@ import com.example.juda_kotlin.ui.theme.main_yellow
 @Composable
 fun DetailMentorScreen(
     navController: NavController,
-    mentorViewModel: MentorViewModel = hiltViewModel(),
-    index: String = ""
 ){
+    var isOpen by remember { mutableStateOf(false) }
+    var isAgree by remember { mutableStateOf(false) }
+    PopUpScreen(isOpen = isOpen, onDismiss = {isOpen = !isOpen}, onAgree = {isAgree = true})
     Box(
         modifier = Modifier
             .fillMaxSize()
             .padding(22.dp)
     ){
         DetailButton(
+            onRegister = { isOpen = true },
             modifier = Modifier.align(Alignment.BottomCenter)
         )
     }
     LazyColumn(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(22.dp)
+        modifier = Modifier.fillMaxWidth().padding(22.dp)
     ) {
         item { DetailTopBar(onClick = {navController.navigateUp()}) }
         item { UserProfile() }
         item { DetailTitle() }
+        item {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 40.dp)
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.empty),
+                    contentDescription = "empty mentee",
+                    modifier = Modifier
+                        .width(141.dp)
+                        .align(Center)
+                )
+            }
+        }
+        item { Spacer(modifier = Modifier.height(100.dp))}
+    }
+}
+
+@Composable
+fun PopUpScreen(
+    isOpen: Boolean,
+    onDismiss: () -> Unit = {},
+    onAgree: () -> Unit = {}
+) {
+    if (isOpen) {
+        Dialog(
+            onDismissRequest = onDismiss,
+            properties = DialogProperties()
+        ) {
+            Box(
+                modifier = Modifier
+                    .padding(20.dp, 20.dp, 20.dp, 0.dp)
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(16.dp))
+                    .background(Color.White)
+            ) {
+                Column(
+                    modifier = Modifier.padding(bottom = 20.dp)
+                ) {
+                    Text(
+                        text = "잠깐",
+                        style = TextStyles.textBody,
+                        modifier = Modifier
+                            .padding(top = 17.dp, bottom = 18.dp)
+                            .fillMaxWidth(),
+                        textAlign = TextAlign.Center
+                    )
+                    Text(
+                        text = "정말 윤현주님의 ‘전세 사기 피하는 팁' 멘토링을 신청하시겠어요?",
+                        style = TextStyles.textSmallTitle,
+                        fontWeight = FontWeight.Normal,
+                        modifier = Modifier
+                            .padding(26.dp, 0.dp, 26.dp, 50.dp)
+                            .fillMaxWidth(),
+                        textAlign = TextAlign.Center
+                    )
+                }
+                Row(
+                    modifier = Modifier
+                        .height(48.dp)
+                        .fillMaxWidth()
+                        .align(BottomCenter),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Box(
+                        Modifier
+                            .weight(1f)
+                            .clickable(onClick = onAgree)
+                            .background(main_yellow)){
+                        Text(
+                            text = "네, 신청할래요.",
+                            style = TextStyles.textBody,
+                            modifier = Modifier
+                                .align(Center)
+                                .fillMaxSize()
+                                .padding(vertical = 10.dp),
+                            textAlign = TextAlign.Center,
+                        )
+                    }
+                    Box(
+                        Modifier
+                            .weight(1f)
+                            .clickable(onClick = onDismiss)
+                            .background(Color(0xFFEFEFEF))) {
+                        Text(
+                            text = "아니요.",
+                            style = TextStyles.textBody,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier
+                                .align(Center)
+                                .fillMaxSize()
+                                .padding(vertical = 10.dp),
+                        )
+                    }
+                }
+            }
+        }
     }
 }
 
 @Composable
 fun DetailButton(
+    onRegister: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -79,16 +174,16 @@ fun DetailButton(
             Text(
                 text = "신청하기",
                 style = TextStyles.textSmallTitle,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
             )
         }
         Box(
            modifier = Modifier
-                .weight(1f)
-                .height(65.dp)
-                .border(width = 0.5.dp, color = main_gray, shape = RoundedCornerShape(46.dp))
-                .clip(RoundedCornerShape(46.dp))
-                .background(Color(0xFFF5F5F5)),
+               .weight(1f)
+               .height(65.dp)
+               .border(width = 0.5.dp, color = main_gray, shape = RoundedCornerShape(46.dp))
+               .clip(RoundedCornerShape(46.dp))
+               .background(Color(0xFFF5F5F5)),
             contentAlignment = Alignment.Center
         ){
             Text(
@@ -133,23 +228,17 @@ fun UserProfile(
     post: PostDTO = PostDTO()
 ) {
     Row(modifier = Modifier.padding(bottom = 30.dp)){
-        AsyncImage(
-            model = ImageRequest.Builder(LocalContext.current)
-                .data("https://k.kakaocdn.net/dn/KeUb5/btr6EUTjP33/mkPVnUVKkmO4tpI5JbBqr0/img_640x640.jpghttps://k.kakaocdn.net/dn/KeUb5/btr6EUTjP33/mkPVnUVKkmO4tpI5JbBqr0/img_640x640.jpg")
-                .crossfade(true)
-                .build(),
-            contentDescription = null,
-            placeholder = painterResource(R.drawable.small_juda),
-            contentScale = ContentScale.Crop,
-            modifier = Modifier
-                .size(38.dp)
-                .padding(end = 13.dp)
-                .clip(CircleShape),
-            alignment = Alignment.Center
+
+        Image(
+            painter = painterResource(id = R.drawable.logo),
+            contentDescription = "logo",
+            modifier = Modifier.size(38.dp)
+            .padding(end = 13.dp)
+            .clip(CircleShape)
         )
         Column {
             Text(
-                text = post.author,
+                text = "원정이",
                 style = TextStyles.textSmallTitle,
             )
             Text(
@@ -173,7 +262,9 @@ fun DetailTopBar(
         Image(
             painter = painterResource(id = R.drawable.back),
             contentDescription = "back arrow",
-            modifier = Modifier.width(11.dp).clickable(onClick = onClick)
+            modifier = Modifier
+                .width(11.dp)
+                .clickable(onClick = onClick)
         )
         Text(
             text = "게시글",

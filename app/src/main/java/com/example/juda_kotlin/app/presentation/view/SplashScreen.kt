@@ -10,6 +10,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -36,10 +38,10 @@ fun SplashScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(main_yellow)
+            .background(brush = Brush.verticalGradient(colors = listOf(main_yellow, Color(0xFFFBEED5))))
     ){
         Image(
-            painter = painterResource(id = R.drawable.big_juda),
+            painter = painterResource(id = R.drawable.splash),
             contentDescription = "juda",
             modifier = Modifier.width(200.dp).align(Alignment.Center)
         )
