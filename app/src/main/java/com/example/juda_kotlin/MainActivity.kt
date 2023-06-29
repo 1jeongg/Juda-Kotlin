@@ -34,7 +34,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    Log.d("tagtag", Utility.getKeyHash(context = LocalContext.current))
+                    //Log.d("tagtag", Utility.getKeyHash(context = LocalContext.current))
                     val navController = rememberNavController()
                     NavHost(
                         navController = navController,

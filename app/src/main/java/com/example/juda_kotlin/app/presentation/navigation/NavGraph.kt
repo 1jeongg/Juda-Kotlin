@@ -12,7 +12,13 @@ fun NavGraphBuilder.judaGraph(
 ){
     composable(route = Screen.SplashScreen.route) { SplashScreen(navController) }
     composable(route = Screen.JudaMainScreen.route) { JudaMainScreen(navController) }
-    composable(route = Screen.DetailMentorScreen.route) { DetailMentorScreen(navController)}
+    composable(
+        route = Screen.DetailMentorScreen.route + "/{id}",
+        arguments = listOf(navArgument("id") { type = NavType.StringType} )
+    ) {
+        val id = it.arguments?.getString("id") ?: ""
+        DetailMentorScreen(navController, index = id)
+    }
     composable(route = Screen.SignInScreen.route) { SignInScreen(navController) }
     composable(route = Screen.BigCategoryScreen.route) { BigCategoryScreen(navController)}
     composable(route = Screen.SmallCategoryScreen.route + "/{index}",
