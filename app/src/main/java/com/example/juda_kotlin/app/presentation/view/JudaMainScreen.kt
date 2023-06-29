@@ -20,6 +20,7 @@ import androidx.compose.ui.Alignment.Companion.Start
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -38,8 +39,9 @@ fun JudaMainScreen(
     navController: NavController
 ){
     Box(
-        modifier = Modifier.fillMaxSize()
-        .background(Color.White)
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.White)
     ) {
         Box {
             LazyColumn(
@@ -53,20 +55,39 @@ fun JudaMainScreen(
                 item { MentorItemList() }
             }
         }
-        Box(
-            modifier = Modifier
-                .padding(17.dp)
-                .background(Color.White, RoundedCornerShape(46.dp))
-                .height(65.dp)
-                .align(BottomCenter)
-                .fillMaxWidth()
-                .border(BorderStroke(0.5.dp, main_gray), RoundedCornerShape(46.dp))){
-            Text(text = "A", style = TextStyles.smallText12, modifier = Modifier.align(CenterStart).padding(start = 50.dp)
-                .clickable { })
-            Text(text = "B", style = TextStyles.smallText12, modifier = Modifier.align(Center)
-                .clickable { })
-            Text(text = "C", style = TextStyles.smallText12, modifier = Modifier.align(CenterEnd).padding(end = 50.dp)
-                .clickable { })
+        Column(
+            modifier = Modifier.align(BottomCenter).padding(17.dp)
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.post),
+                contentDescription = "post",
+                modifier = Modifier.size(65.dp).clickable { }.padding(bottom=17.dp)
+                    .align(Alignment.End)
+            )
+            Box(
+                modifier = Modifier
+                    .height(65.dp)
+                    .background(Color.White, RoundedCornerShape(46.dp))
+                    .fillMaxWidth()
+                    .border(BorderStroke(0.5.dp, main_gray), RoundedCornerShape(46.dp))
+            ) {
+
+                Text(text = "A",
+                    style = TextStyles.smallText12,
+                    modifier = Modifier
+                        .align(CenterStart)
+                        .padding(start = 50.dp)
+                        .clickable { navController.navigate(Screen.MenteeScreen.route) })
+                Text(text = "B", style = TextStyles.smallText12, modifier = Modifier
+                    .align(Center)
+                    .clickable { navController.navigate(Screen.PostScreen.route) })
+                Text(text = "C",
+                    style = TextStyles.smallText12,
+                    modifier = Modifier
+                        .align(CenterEnd)
+                        .padding(end = 50.dp)
+                        .clickable { })
+            }
         }
     }
 }

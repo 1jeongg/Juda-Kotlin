@@ -14,4 +14,6 @@ fun NavGraphBuilder.judaGraph(
     composable(route = Screen.SignInScreen.route) { SignInScreen(navController) }
     composable(route = Screen.BigCategoryScreen.route) { BigCategoryScreen(navController)}
     composable(route = Screen.SmallCategoryScreen.route) { SmallCategoryScreen(navController) }
+    composable(route = Screen.MenteeScreen.route) { MenteeScreen(navController) }
+    composable(route = Screen.PostScreen.route) { PostScreen(navController)}
 }
