@@ -1,6 +1,7 @@
 package com.example.juda_kotlin
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,7 +17,11 @@ import com.example.juda_kotlin.app.presentation.navigation.Screen
 import com.example.juda_kotlin.app.presentation.navigation.judaGraph
 import com.example.juda_kotlin.app.presentation.view.JudaMainScreen
 import com.example.juda_kotlin.ui.theme.Juda_KotlinTheme
+import com.kakao.sdk.common.KakaoSdk
+import com.kakao.sdk.common.util.Utility
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
