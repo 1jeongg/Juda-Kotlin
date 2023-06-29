@@ -15,15 +15,22 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.juda_kotlin.R
+import com.example.juda_kotlin.app.data.BigCategory
+import com.example.juda_kotlin.app.data.categoryImage
 import com.example.juda_kotlin.app.presentation.navigation.Screen
+import com.example.juda_kotlin.app.presentation.viewmodel.loginViewModel
 import com.example.juda_kotlin.ui.theme.TextStyles
+import com.example.juda_kotlin.ui.theme.main_yellow
 
 @Composable
 fun BigCategoryScreen(
-    navController: NavController
+    navController: NavController,
+    loginViewModel: loginViewModel = hiltViewModel()
 ) {
+    var index = 0
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -35,6 +42,7 @@ fun BigCategoryScreen(
             modifier = Modifier
                 .padding(22.dp)
                 .width(11.dp)
+                .clickable { navController.navigateUp() }
         )
         Box(
             modifier = Modifier
@@ -43,18 +51,21 @@ fun BigCategoryScreen(
                 .background(Color.White)
                 .padding(20.dp, 30.dp)) {
             Box(
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
                     .align(Alignment.BottomCenter)
                     .padding(45.dp)
                     .height(40.dp)
                     .clip(RoundedCornerShape(24.dp))
-                    .clickable(onClick = { navController.navigate(Screen.SmallCategoryScreen.route) })
-                    .background(Color(0xFFEAEAEA))
+                    .clickable(onClick = { navController.navigate(Screen.SmallCategoryScreen.route + "/$index") })
+                    .background(main_yellow)
             ){
                 Text(
                     text = "다음",
                     style = TextStyles.textSearch,
-                    modifier = Modifier.fillMaxWidth().align(Alignment.Center),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .align(Alignment.Center),
                     textAlign = TextAlign.Center,
                     color = Color.Black
                 )
@@ -72,12 +83,13 @@ fun BigCategoryScreen(
                 Divider(modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 9.dp, bottom = 25.dp), thickness = 0.5.dp)
-                SelectTopic()
-                SelectTopic(id = R.drawable.sport, text = "운동")
-                SelectTopic(
-                    id = R.drawable.houses,
-                    text = "가사/집안일"
-                )
+                repeat(3){
+                    SelectTopic(
+                        onClick = { index = it },
+                        id = categoryImage[it],
+                        text = BigCategory[it]
+                    )
+                }
                 }
             }
     }
@@ -98,7 +110,7 @@ fun SelectTopic(
             .padding(bottom = 14.dp)
     ) {
         Image(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier.fillMaxSize().clickable(onClick = onClick),
             painter = painterResource(id = id),
             contentDescription = ""
         )
@@ -108,7 +120,7 @@ fun SelectTopic(
             color = Color.White,
             modifier = Modifier
                 .align(Alignment.BottomStart)
-                .padding(start = 20.dp, bottom = 10.dp)
+                .padding(start = 25.dp, bottom = 10.dp)
         )
     }
 }

@@ -1,11 +1,14 @@
 package com.example.juda_kotlin.app.presentation.view
 
+import android.util.Log
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -13,16 +16,25 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.juda_kotlin.R
+import com.example.juda_kotlin.app.data.BigCategory
+import com.example.juda_kotlin.app.data.SmallCategory
 import com.example.juda_kotlin.app.presentation.navigation.Screen
+import com.example.juda_kotlin.app.presentation.viewmodel.loginViewModel
 import com.example.juda_kotlin.ui.theme.TextStyles
 import com.example.juda_kotlin.ui.theme.main_gray
+import com.example.juda_kotlin.ui.theme.main_yellow
 
 @Composable
 fun SmallCategoryScreen(
-    navController: NavController
+    navController: NavController,
+    index: Int,
+    loginViewModel: loginViewModel = hiltViewModel()
 ) {
+    val isSelected  = remember { listOf(mutableStateOf(false), mutableStateOf(false), mutableStateOf(false),
+        mutableStateOf(false), mutableStateOf(false), mutableStateOf(false)) }
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -34,6 +46,7 @@ fun SmallCategoryScreen(
             modifier = Modifier
                 .padding(22.dp)
                 .width(11.dp)
+                .clickable { navController.navigateUp() }
         )
         Box(
             modifier = Modifier
@@ -42,18 +55,22 @@ fun SmallCategoryScreen(
                 .background(Color.White)
                 .padding(20.dp, 30.dp)) {
             Box(
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
                     .align(Alignment.BottomCenter)
                     .padding(45.dp)
                     .height(40.dp)
                     .clip(RoundedCornerShape(24.dp))
-                    .clickable(onClick = { navController.navigate(Screen.SmallCategoryScreen.route) })
-                    .background(Color(0xFFEAEAEA))
+                    .clickable(onClick = { navController.navigate(Screen.JudaMainScreen.route) })
+                    .background(main_yellow)
             ){
                 Text(
                     text = "완료",
                     style = TextStyles.textSearch,
-                    modifier = Modifier.fillMaxWidth().align(Alignment.Center).clickable { navController.navigate(Screen.JudaMainScreen.route) },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .align(Alignment.Center)
+                        .clickable { navController.navigate(Screen.JudaMainScreen.route) },
                     textAlign = TextAlign.Center,
                     color = Color.Black
                 )
@@ -74,17 +91,19 @@ fun SmallCategoryScreen(
                         .padding(top = 9.dp, bottom = 57.dp), thickness = 0.5.dp
                 )
                 Text(
-                    text = "가사/집안일",
+                    text = BigCategory[index],
                     style = TextStyles.textTitle,
                     modifier = Modifier.padding(bottom = 23.dp)
                 )
-                CategoryItem(isSelected = false, text = "집밥")
-                CategoryItem(isSelected = true, text = "반짝반짝한 집")
-                CategoryItem(isSelected = true, text = "집 구하기")
-                CategoryItem(isSelected = false, text = "깨끗한 빨래")
-                CategoryItem(isSelected = false, text = "가계부")
-
-
+                SmallCategory[index].forEachIndexed { a, it ->
+                    CategoryItem(
+                        isSelected = isSelected[a].value,
+                        text = it,
+                        onClick = {
+                            loginViewModel.addSmallCategory(a)
+                            isSelected[a].value = !isSelected[a].value
+                        })
+                }
             }
         }
 
@@ -93,17 +112,19 @@ fun SmallCategoryScreen(
 
 @Composable
 fun CategoryItem(
+    onClick: () -> Unit = {},
     isSelected: Boolean = false,
     text: String = ""
 ) {
     val textColor = if (isSelected) Color.White else Color.Black
-    val btnColor = if (isSelected) Color(0xFFB5B5B5) else Color.White
+    val btnColor = if (isSelected) main_yellow else Color.White
     Box(
         modifier = Modifier
             .wrapContentWidth()
             .height(40.dp)
             .padding(bottom = 10.dp)
             .clip(RoundedCornerShape(24.dp))
+            .clickable(onClick = onClick)
             .background(btnColor)
             .border(BorderStroke(0.5.dp, main_gray), RoundedCornerShape(24.dp))
     ){

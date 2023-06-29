@@ -2,7 +2,9 @@ package com.example.juda_kotlin.app.presentation.navigation
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavType
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import com.example.juda_kotlin.app.presentation.view.*
 
 fun NavGraphBuilder.judaGraph(
@@ -13,7 +15,11 @@ fun NavGraphBuilder.judaGraph(
     composable(route = Screen.DetailMentorScreen.route) { DetailMentorScreen(navController)}
     composable(route = Screen.SignInScreen.route) { SignInScreen(navController) }
     composable(route = Screen.BigCategoryScreen.route) { BigCategoryScreen(navController)}
-    composable(route = Screen.SmallCategoryScreen.route) { SmallCategoryScreen(navController) }
+    composable(route = Screen.SmallCategoryScreen.route + "/{index}",
+        arguments = listOf(navArgument("index"){type = NavType.IntType})) {
+        val id = it.arguments?.getInt("index") ?: 0
+        SmallCategoryScreen(navController, id)
+    }
     composable(route = Screen.MenteeScreen.route) { MenteeScreen(navController) }
     composable(route = Screen.PostScreen.route) { PostScreen(navController)}
 }
