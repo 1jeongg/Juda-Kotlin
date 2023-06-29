@@ -23,7 +23,7 @@ fun SplashScreen(
     navController: NavController
 ){
     LaunchedEffect(key1 = true){
-        val nextScreen = Screen.JudaMainScreen
+        val nextScreen = Screen.SignInScreen
         delay(500L)
         navController.navigate(nextScreen.route)
     }

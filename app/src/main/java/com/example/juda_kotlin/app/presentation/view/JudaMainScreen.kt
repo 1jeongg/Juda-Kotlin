@@ -1,15 +1,22 @@
 package com.example.juda_kotlin.app.presentation.view
 
+import android.view.RoundedCorner
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
+import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.Bottom
+import androidx.compose.ui.Alignment.Companion.BottomCenter
+import androidx.compose.ui.Alignment.Companion.Center
+import androidx.compose.ui.Alignment.Companion.CenterEnd
+import androidx.compose.ui.Alignment.Companion.CenterStart
+import androidx.compose.ui.Alignment.Companion.Start
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -30,18 +37,37 @@ import com.example.juda_kotlin.ui.theme.main_gray
 fun JudaMainScreen(
     navController: NavController
 ){
-    LazyColumn(
-        modifier = Modifier
-            .background(Color.White)
-            .fillMaxSize()
-            .padding(top = 27.dp, start = 20.dp, end = 20.dp)
+    Box(
+        modifier = Modifier.fillMaxSize()
+        .background(Color.White)
     ) {
-        item { TopJuda() }
-        item { SearchJuda() }
-        item { MentorRecommend() }
-        item { MentorItemList(onMove = {navController.navigate(Screen.DetailMentorScreen.route)}) }
-        item { KeywordMentoring() }
-        item { MentorItemList() }
+        Box {
+            LazyColumn(
+                modifier = Modifier.padding(top = 27.dp, start = 20.dp, end = 20.dp)
+            ) {
+                item { TopJuda() }
+                item { SearchJuda() }
+                item { MentorRecommend() }
+                item { MentorItemList(onMove = { navController.navigate(Screen.DetailMentorScreen.route) }) }
+                item { KeywordMentoring() }
+                item { MentorItemList() }
+            }
+        }
+        Box(
+            modifier = Modifier
+                .padding(17.dp)
+                .background(Color.White, RoundedCornerShape(46.dp))
+                .height(65.dp)
+                .align(BottomCenter)
+                .fillMaxWidth()
+                .border(BorderStroke(0.5.dp, main_gray), RoundedCornerShape(46.dp))){
+            Text(text = "A", style = TextStyles.smallText12, modifier = Modifier.align(CenterStart).padding(start = 50.dp)
+                .clickable { })
+            Text(text = "B", style = TextStyles.smallText12, modifier = Modifier.align(Center)
+                .clickable { })
+            Text(text = "C", style = TextStyles.smallText12, modifier = Modifier.align(CenterEnd).padding(end = 50.dp)
+                .clickable { })
+        }
     }
 }
 
@@ -60,7 +86,9 @@ fun KeywordMentoring() {
             text = "자세히보기",
             fontSize = 8.sp,
             color = Color(0xFF7d7d7d),
-            modifier = Modifier.fillMaxWidth().align(Bottom),
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Bottom),
             textAlign = TextAlign.End
         )
     }
@@ -143,7 +171,10 @@ fun MentorItem(
                             modifier = Modifier
                                 .wrapContentWidth()
                                 .clip(RoundedCornerShape(40.dp))
-                                .border(border = BorderStroke(0.5.dp, main_gray), RoundedCornerShape(40.dp))
+                                .border(
+                                    border = BorderStroke(0.5.dp, main_gray),
+                                    RoundedCornerShape(40.dp)
+                                )
                         ) {
                             Text(
                                 text = it,
@@ -181,7 +212,9 @@ fun MentorRecommend() {
                 text = "자세히보기",
                 fontSize = 8.sp,
                 color = Color(0xFF7d7d7d),
-                modifier = Modifier.fillMaxWidth().align(Bottom),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Bottom),
                 textAlign = TextAlign.End
             )
         }
