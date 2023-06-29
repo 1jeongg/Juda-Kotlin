@@ -8,6 +8,6 @@ import dagger.hilt.android.HiltAndroidApp
 class GlobalApplication: Application() {
     override fun onCreate() {
         super.onCreate()
-        KakaoSdk.init(this, "b490ad3523748d33cff8c8070f61c958")
+        KakaoSdk.init(this, "757111a2ccb6ef41a6535b6605a6ff80")
     }
 }
