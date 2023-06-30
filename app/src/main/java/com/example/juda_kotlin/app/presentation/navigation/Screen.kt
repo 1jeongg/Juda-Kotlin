@@ -9,4 +9,6 @@ sealed class Screen(val route: String) {
     object SmallCategoryScreen: Screen("small_category_screen")
     object MenteeScreen: Screen("mentee_screen")
     object PostScreen: Screen("post_screen")
+    object SuccessMatchScreen: Screen("success_match_screen")
+
 }
