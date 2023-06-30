@@ -18,4 +18,4 @@
 
 3. [java 카카오 간편 로그인 구현하기 처음부터 자세히!](https://aljjabaegi.tistory.com/673)
 
-4. 개인 코드 (아키텍쳐 및 단순 코드(팝업창, 카카오 로그인 등) 사용 - [디바이드](https://github.com/D-VIDE/D-VIDE_Android), [푸릇에이블](https://github.com/ApptiveDev/apptive-17th-fruitable-frontend)
+4. 개인 코드 (아키텍쳐 및 단순 코드(팝업창, 카카오 로그인, 리프레시 등) 사용 - [디바이드](https://github.com/D-VIDE/D-VIDE_Android), [푸릇에이블](https://github.com/ApptiveDev/apptive-17th-fruitable-frontend)
