@@ -7,18 +7,22 @@ import com.example.juda_kotlin.app.data.PostDTO
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
 
 @HiltViewModel
 class MenteeViewModel @Inject constructor(): ViewModel() {
     private val _posts = mutableListOf<PostDTO>()
     val posts = _posts
-
+    private var _isRefresh = MutableStateFlow(false)
+    var isRefresh = _isRefresh.asStateFlow()
     init {
         getPosts()
     }
 
     fun getPosts(){
+        _isRefresh.value = true
         val db = Firebase.firestore
         db.collection("postRequest")
             .get()
@@ -35,11 +39,16 @@ class MenteeViewModel @Inject constructor(): ViewModel() {
                             title = document.data["title"].toString()
                         )
                     )
-                    Log.d("tagtag", document.data["author"].toString())
                 }
+                _isRefresh.value = false
             }
             .addOnFailureListener {
+                _isRefresh.value = false
                 Log.d("tagtag", "실패함")
             }
+    }
+    fun refreshGetSales() {
+        _isRefresh.value = true
+        getPosts()
     }
 }

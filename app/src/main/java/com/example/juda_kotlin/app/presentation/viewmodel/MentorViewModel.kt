@@ -10,9 +10,7 @@ import com.google.firebase.ktx.Firebase
 import com.kakao.sdk.common.KakaoSdk.init
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import java.sql.Timestamp
 import javax.inject.Inject
@@ -21,16 +19,18 @@ import javax.inject.Inject
 class MentorViewModel @Inject constructor(): ViewModel() {
     private val _posts =  mutableListOf<PostDTO>()
     val posts = _posts
-    private val _post = mutableStateOf<PostDTO>(PostDTO())
-    val post = _post
+    private var _isRefresh = MutableStateFlow(false)
+    var isRefresh = _isRefresh.asStateFlow()
     init {
         getPosts()
     }
     fun getPosts() = viewModelScope.launch {
+        _isRefresh.value = true
         val db = Firebase.firestore
         db.collection("postProvider")
             .get()
             .addOnSuccessListener { result ->
+
                 for (document in result){
                     _posts.add(
                         PostDTO(
@@ -45,9 +45,15 @@ class MentorViewModel @Inject constructor(): ViewModel() {
                     )
                     Log.d("tagtag", document.data["author"].toString())
                 }
+               _isRefresh.value = false
             }
             .addOnFailureListener {
+                _isRefresh.value = false
                 Log.d("tagtag", "실패함")
             }
+    }
+    fun refreshGetSales() {
+        _isRefresh.value = true
+        getPosts()
     }
 }

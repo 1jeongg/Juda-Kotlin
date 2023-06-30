@@ -11,6 +11,8 @@ import androidx.compose.material.Text
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.Bottom
 import androidx.compose.ui.Alignment.Companion.BottomCenter
@@ -35,6 +37,10 @@ import com.example.juda_kotlin.app.presentation.viewmodel.MentorViewModel
 import com.example.juda_kotlin.ui.theme.TextStyles
 import com.example.juda_kotlin.ui.theme.card_gray
 import com.example.juda_kotlin.ui.theme.main_gray
+import com.example.juda_kotlin.ui.theme.main_yellow
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import kotlinx.coroutines.delay
 
 @Composable
@@ -45,32 +51,43 @@ fun JudaMainScreen(
     val tags = GlobalApplication.prefs.getString("tag2", "")
     val posts = mentorViewModel.posts
     val scaffoldState = rememberScaffoldState()
-    mentorViewModel.getPosts() //legacy
-    LaunchedEffect(key1 = true){
-        mentorViewModel.getPosts()
-        delay(3000L)
-    }
+    val isRefresh by mentorViewModel.isRefresh.collectAsState()
+    val swipeRefreshState = rememberSwipeRefreshState(isRefreshing = isRefresh)
+
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.White)
     ) {
         Box {
-            LazyColumn(
-                modifier = Modifier.padding(
-                    top = 27.dp,
-                    start = 20.dp,
-                    end = 20.dp,
-                    bottom = 50.dp
-                )
+            SwipeRefresh(
+                state = swipeRefreshState,
+                onRefresh = { mentorViewModel.refreshGetSales() },
+                indicator = { state, refreshTrigger ->
+                    SwipeRefreshIndicator(
+                        state = state,
+                        refreshTriggerDistance = refreshTrigger,
+                        backgroundColor = Color.White,
+                        contentColor = main_yellow
+                    )
+                }
             ) {
-                item { TopJuda() }
-                item { SearchJuda() }
-                item { MentorRecommend() }
-                item { MentorItemList(posts, navController) }
-                item { KeywordMentoring() }
-                item { MentorItemList(posts, navController) }
-                item { Spacer(modifier = Modifier.height(50.dp)) }
+                LazyColumn(
+                    modifier = Modifier.padding(
+                        top = 27.dp,
+                        start = 20.dp,
+                        end = 20.dp,
+                        bottom = 50.dp
+                    )
+                ) {
+                    item { TopJuda() }
+                    item { SearchJuda() }
+                    item { MentorRecommend() }
+                    item { MentorItemList(posts, navController) }
+                    item { KeywordMentoring() }
+                    item { MentorItemList(posts, navController) }
+                    item { Spacer(modifier = Modifier.height(50.dp)) }
+                }
             }
         }
         NavigationBar(Modifier.align(BottomCenter), navController = navController, true)

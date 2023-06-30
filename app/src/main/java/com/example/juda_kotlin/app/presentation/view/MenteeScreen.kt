@@ -13,6 +13,8 @@ import androidx.compose.material.Text
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -30,6 +32,10 @@ import com.example.juda_kotlin.app.presentation.navigation.Screen
 import com.example.juda_kotlin.app.presentation.viewmodel.MenteeViewModel
 import com.example.juda_kotlin.ui.theme.TextStyles
 import com.example.juda_kotlin.ui.theme.main_gray
+import com.example.juda_kotlin.ui.theme.main_yellow
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 
 @Composable
 fun MenteeScreen(
@@ -38,7 +44,8 @@ fun MenteeScreen(
 ){
     val scaffoldState = rememberScaffoldState()
     val posts = menteeViewModel.posts
-    menteeViewModel.getPosts() //legacy
+    val isRefresh by menteeViewModel.isRefresh.collectAsState()
+    val swipeRefreshState = rememberSwipeRefreshState(isRefreshing = isRefresh)
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -50,7 +57,20 @@ fun MenteeScreen(
             ) {
                 TopJuda()
                 FilterItemList(allCategory)
-                MenteeItemList(posts = posts, navController = navController)
+                SwipeRefresh(
+                    state = swipeRefreshState,
+                    onRefresh = { menteeViewModel.refreshGetSales() },
+                    indicator = { state, refreshTrigger ->
+                        SwipeRefreshIndicator(
+                            state = state,
+                            refreshTriggerDistance = refreshTrigger,
+                            backgroundColor = Color.White,
+                            contentColor = main_yellow
+                        )
+                    }
+                ) {
+                    MenteeItemList(posts = posts, navController = navController)
+                }
             }
         }
         NavigationBar(Modifier.align(Alignment.BottomCenter), navController = navController, false)
