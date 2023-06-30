@@ -25,6 +25,7 @@ import androidx.compose.ui.window.DialogProperties
 import androidx.navigation.NavController
 import com.example.juda_kotlin.R
 import com.example.juda_kotlin.app.data.PostDTO
+import com.example.juda_kotlin.app.presentation.navigation.Screen
 import com.example.juda_kotlin.ui.theme.TextStyles
 import com.example.juda_kotlin.ui.theme.main_gray
 import com.example.juda_kotlin.ui.theme.main_yellow
@@ -35,7 +36,11 @@ fun DetailMentorScreen(
 ){
     var isOpen by remember { mutableStateOf(false) }
     var isAgree by remember { mutableStateOf(false) }
-    PopUpScreen(isOpen = isOpen, onDismiss = {isOpen = !isOpen}, onAgree = {isAgree = true})
+    PopUpScreen(
+        isOpen = isOpen,
+        onDismiss = { isOpen = !isOpen },
+        onAgree = {navController.navigate(Screen.SuccessMatchScreen.route)}
+    )
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -67,7 +72,6 @@ fun DetailMentorScreen(
                 )
             }
         }
-        item { Spacer(modifier = Modifier.height(100.dp))}
     }
 }
 
@@ -168,7 +172,8 @@ fun DetailButton(
                 .height(65.dp)
                 .border(width = 0.5.dp, color = main_gray, shape = RoundedCornerShape(46.dp))
                 .clip(RoundedCornerShape(46.dp))
-                .background(main_yellow),
+                .background(main_yellow)
+                .clickable(onClick = onRegister),
             contentAlignment = Alignment.Center
         ){
             Text(

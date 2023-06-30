@@ -83,9 +83,9 @@ fun JudaMainScreen(
                     item { TopJuda() }
                     item { SearchJuda() }
                     item { MentorRecommend() }
-                    item { MentorItemList(posts, navController) }
+                    item { MentorItemList(posts.shuffled(), navController) }
                     item { KeywordMentoring() }
-                    item { MentorItemList(posts, navController) }
+                    item { MentorItemList(posts.shuffled(), navController) }
                     item { Spacer(modifier = Modifier.height(50.dp)) }
                 }
             }

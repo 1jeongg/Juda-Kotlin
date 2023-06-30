@@ -55,5 +55,6 @@ class MentorViewModel @Inject constructor(): ViewModel() {
     fun refreshGetSales() {
         _isRefresh.value = true
         getPosts()
+        _posts.shuffle()
     }
 }
