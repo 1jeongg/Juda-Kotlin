@@ -13,6 +13,6 @@ class GlobalApplication: Application() {
     override fun onCreate() {
         prefs = UserStore(applicationContext)
         super.onCreate()
-        KakaoSdk.init(this, "18163e5c4fbab7da2bbc5fd97307aa9e")
+        KakaoSdk.init(this, "b490ad3523748d33cff8c8070f61c958")
     }
 }

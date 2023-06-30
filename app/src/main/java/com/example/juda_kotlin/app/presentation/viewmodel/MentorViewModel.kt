@@ -43,13 +43,11 @@ class MentorViewModel @Inject constructor(): ViewModel() {
                             title = document.data["title"].toString()
                         )
                     )
-                    Log.d("tagtag", document.data["author"].toString())
                 }
                _isRefresh.value = false
             }
             .addOnFailureListener {
                 _isRefresh.value = false
-                Log.d("tagtag", "실패함")
             }
     }
     fun refreshGetSales() {

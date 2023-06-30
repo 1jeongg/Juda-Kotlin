@@ -10,5 +10,5 @@ sealed class Screen(val route: String) {
     object MenteeScreen: Screen("mentee_screen")
     object PostScreen: Screen("post_screen")
     object SuccessMatchScreen: Screen("success_match_screen")
-
+    object ChattingScreen: Screen("chatting_screen")
 }

@@ -42,7 +42,6 @@ class loginViewModel @Inject constructor(): ViewModel(){
                 GlobalApplication.prefs.setString("nickname", user.kakaoAccount?.profile?.nickname ?: "user")
                 GlobalApplication.prefs.setString("gender", user.kakaoAccount?.gender?.name ?: "female")
                 GlobalApplication.prefs.setString("age", user.kakaoAccount?.ageRange?.name ?: "AGE_20_29")
-                Log.d("tagtag", GlobalApplication.prefs.getString("nickname", "user"))
             } else {
                 Log.d("tagtag", "로그인 안됨")
             }

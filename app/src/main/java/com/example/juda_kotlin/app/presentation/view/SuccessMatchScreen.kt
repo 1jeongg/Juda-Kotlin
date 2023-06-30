@@ -67,7 +67,7 @@ fun SuccessMatchScreen(
                     .height(40.dp)
                     .clip(RoundedCornerShape(24.dp))
                     .clickable {
-                        navController.navigate(Screen.JudaMainScreen.route)
+                        navController.navigate(Screen.ChattingScreen.route)
                     }
                     .background(main_yellow)
             ){

@@ -230,12 +230,13 @@ fun DetailTitle(
 
 @Composable
 fun UserProfile(
-    post: PostDTO = PostDTO()
+    name: String = "남원정",
+    role: String = "시니어 멘토"
 ) {
     Row(modifier = Modifier.padding(bottom = 30.dp)){
 
         Image(
-            painter = painterResource(id = R.drawable.logo),
+            painter = painterResource(id = R.drawable.people),
             contentDescription = "logo",
             modifier = Modifier.size(38.dp)
             .padding(end = 13.dp)
@@ -243,11 +244,11 @@ fun UserProfile(
         )
         Column {
             Text(
-                text = "원정이",
+                text = name,
                 style = TextStyles.textSmallTitle,
             )
             Text(
-                text = "시니어 멘토",
+                text = role,
                 style = TextStyles.smallText12,
                 fontWeight = FontWeight.Light
             )

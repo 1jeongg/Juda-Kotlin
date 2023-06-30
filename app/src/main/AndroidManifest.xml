@@ -24,7 +24,7 @@
             </intent-filter>
             <intent-filter>
                 <data android:host="oauth"
-                    android:scheme="kakao18163e5c4fbab7da2bbc5fd97307aa9e"/>
+                    android:scheme="kakaob490ad3523748d33cff8c8070f61c958"/>
             </intent-filter>
             <meta-data
                 android:name="android.app.lib_name"

@@ -27,4 +27,5 @@ fun NavGraphBuilder.judaGraph(
     composable(route = Screen.MenteeScreen.route) { MenteeScreen(navController) }
     composable(route = Screen.PostScreen.route) { PostScreen(navController)}
     composable(route = Screen.SuccessMatchScreen.route) { SuccessMatchScreen(navController) }
+    composable(route = Screen.ChattingScreen.route){ ChattingScreen(navController) }
 }

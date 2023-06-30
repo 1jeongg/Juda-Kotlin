@@ -42,6 +42,7 @@ import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import kotlinx.coroutines.delay
+import java.util.*
 
 @Composable
 fun JudaMainScreen(
@@ -49,10 +50,13 @@ fun JudaMainScreen(
     mentorViewModel: MentorViewModel = hiltViewModel()
 ){
     val tags = GlobalApplication.prefs.getString("tag2", "")
+    val tagList = tags.split(" ").filter{ it.isNotBlank() }
+
     val posts = mentorViewModel.posts
     val scaffoldState = rememberScaffoldState()
     val isRefresh by mentorViewModel.isRefresh.collectAsState()
     val swipeRefreshState = rememberSwipeRefreshState(isRefreshing = isRefresh)
+
 
     Box(
         modifier = Modifier
